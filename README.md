@@ -23,3 +23,22 @@
 - docs/09-log-template.md
 - docs/10-common-mistakes.md
 - docs/11-next-steps.md
+
+## 확장 학습서
+
+전기 초심자가 태양광, ESP32, 아두이노식 IoT 실험을 재미있게 따라가면서 전기기사 기초 감각까지 같이 키울 수 있도록 `curriculum/` 아래에 3권짜리 학습서 구조를 추가했다.
+
+- curriculum/README.md
+- curriculum/volume-1-electricity-basics.md
+- curriculum/volume-2-esp32-iot.md
+- curriculum/volume-3-solar-power-and-exam.md
+- curriculum/project-atlas-60.md
+- curriculum/electrician-exam-bridge.md
+- curriculum/source-index.md
+- curriculum/templates/experiment-note.md
+
+## 큰 원칙
+
+처음에는 전기를 많이 쓰는 사람이 아니라 전기를 정확히 보는 사람이 된다.
+
+이 저장소의 실습은 낮은 전압 DC 실험, 센서 측정, 로그 기록, 계산 연습을 중심으로 한다. 220V 콘센트, 배전반, 인버터, 리튬 배터리 충전 회로의 장시간 무인 운전은 이 문서만 보고 진행하지 않는다.
