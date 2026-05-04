@@ -28,7 +28,13 @@
 
 전기 초심자가 태양광, ESP32, 아두이노식 IoT 실험을 재미있게 따라가면서 전기기사 기초 감각까지 같이 키울 수 있도록 `curriculum/` 아래에 3권짜리 학습서 구조를 추가했다.
 
+![원룸 태양광 실험실 개요](assets/images/01-lab-overview.png)
+
 - curriculum/README.md
+- curriculum/visual-guide.md
+- curriculum/expanded-study-pack.md
+- curriculum/workbook-150-questions.md
+- curriculum/macos-arduino-esp32-setup.md
 - curriculum/volume-1-electricity-basics.md
 - curriculum/volume-2-esp32-iot.md
 - curriculum/volume-3-solar-power-and-exam.md

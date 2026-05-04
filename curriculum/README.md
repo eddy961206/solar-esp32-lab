@@ -13,9 +13,17 @@
 1. [1권 - 전기 초심자를 위한 손실험 전기학](./volume-1-electricity-basics.md)
 2. [2권 - ESP32와 아두이노식 IoT 만들기](./volume-2-esp32-iot.md)
 3. [3권 - 태양광, 전력 계산, 전기기사 연결](./volume-3-solar-power-and-exam.md)
-4. [60개 프로젝트 백과](./project-atlas-60.md)
-5. [전기기사 연결표](./electrician-exam-bridge.md)
-6. [출처 색인](./source-index.md)
+4. [그림으로 보는 전체 안내](./visual-guide.md)
+5. [확장 학습팩](./expanded-study-pack.md)
+6. [150문제 문제은행](./workbook-150-questions.md)
+7. [macOS에서 Arduino IDE와 ESP32 시작하기](./macos-arduino-esp32-setup.md)
+8. [60개 프로젝트 백과](./project-atlas-60.md)
+9. [전기기사 연결표](./electrician-exam-bridge.md)
+10. [출처 색인](./source-index.md)
+
+## 그림 먼저 보기
+
+![16주 학습 로드맵](../assets/images/06-16-week-roadmap.png)
 
 ## 이 커리큘럼의 안전 경계
 
