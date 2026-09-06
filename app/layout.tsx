@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: '%s · 원룸 태양광 실험실',
   },
   description:
-    'SNP-5MA 6V 5W 패널 · ESP32 · INA219 · BH1750으로 안전하게 배우는 전기 입문 웹 가이드. 5일 실습, 3권 커리큘럼, 150문제, 계산기 포함.',
+    '어려운 말 없이 배우는 전기 첫걸음. SNP-5MA 패널 · ESP32 · INA219 · BH1750 5일 따라하기, 쉬운 부품 도감, 용어 사전, 150문제, 계산기 포함.',
   metadataBase: new URL('https://solar-esp32-lab.vercel.app'),
   openGraph: {
     title: '원룸 태양광 실험실',

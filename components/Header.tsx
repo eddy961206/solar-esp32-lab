@@ -6,8 +6,9 @@ import { useState } from 'react';
 
 const NAV = [
   { href: '/docs', label: '실험 가이드' },
-  { href: '/curriculum', label: '커리큘럼' },
+  { href: '/curriculum', label: '읽을거리' },
   { href: '/hardware', label: '부품 도감' },
+  { href: '/glossary', label: '용어 사전' },
   { href: '/workbook', label: '문제은행' },
   { href: '/calculator', label: '계산기' },
   { href: '/gallery', label: '그림' },
@@ -29,7 +30,7 @@ export default function Header() {
               원룸 태양광 실험실
             </span>
             <span className="block truncate text-[11px] font-medium text-stone-500">
-              ESP32 · INA219 · BH1750
+              어려운 말 없이 배우는 전기 첫걸음
             </span>
           </span>
         </Link>
@@ -42,7 +43,7 @@ export default function Header() {
               <Link
                 key={n.href}
                 href={n.href}
-                className={`rounded-full px-3.5 py-2 text-sm font-semibold transition ${
+                className={`rounded-full px-3 py-2 text-[13px] font-semibold transition ${
                   active
                     ? 'bg-stone-900 text-white'
                     : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'

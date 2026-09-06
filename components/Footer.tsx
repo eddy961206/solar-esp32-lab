@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <p className="text-sm font-extrabold">☀️ 원룸 태양광 실험실</p>
             <p className="mt-2 text-[13px] leading-6 text-stone-500">
-              낮은 전압 DC · 센서 측정 · 로그 기록 중심의
+              어려운 말 없이 배우는
               <br />
               안전한 첫 전기 실험실입니다.
             </p>
@@ -18,11 +18,11 @@ export default function Footer() {
           </div>
           <nav aria-label="푸터 내비게이션" className="grid grid-cols-2 gap-2 text-sm">
             <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/docs">실험 가이드</Link>
-            <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/curriculum">커리큘럼</Link>
+            <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/curriculum">읽을거리</Link>
             <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/hardware">부품 도감</Link>
+            <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/glossary">용어 사전</Link>
             <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/workbook">문제은행</Link>
             <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/calculator">옴의법칙 계산기</Link>
-            <Link className="rounded-lg px-2 py-1.5 font-semibold text-stone-600 hover:bg-stone-100" href="/gallery">그림 자료</Link>
           </nav>
           <div className="text-[13px] leading-6 text-stone-500">
             <p className="font-bold text-stone-700">학습 원칙</p>
@@ -43,8 +43,8 @@ export default function Footer() {
         {[
           { href: '/', label: '홈', icon: '🏠' },
           { href: '/docs', label: '실험', icon: '🧪' },
+          { href: '/glossary', label: '용어', icon: '📖' },
           { href: '/calculator', label: '계산기', icon: '🧮' },
-          { href: '/workbook', label: '문제', icon: '📝' },
           { href: '/hardware', label: '부품', icon: '🧰' },
         ].map((n) => (
           <Link

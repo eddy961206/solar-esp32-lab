@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DOCS_ORDER } from '@/lib/content';
+import { LESSONS, LEVEL_LABEL } from '@/content/lessons';
 
 export const metadata = { title: '실험 가이드' };
 
@@ -7,35 +7,39 @@ export default function DocsIndex() {
   return (
     <div className="space-y-6 pt-6">
       <div>
-        <p className="text-[13px] font-bold text-amber-700">🧪 HANDS-ON · 5일 실습</p>
+        <p className="text-[13px] font-bold text-amber-700">🧪 HANDS-ON · 따라하기</p>
         <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">실험 가이드</h1>
-        <p className="mt-2 text-sm leading-6 text-stone-500">
-          하루에 하나씩, 변수도 하나씩만 바꾸며 진행하세요. 배선을 바꿨으면 코드는 그대로.
+        <p className="mt-2 text-[15px] leading-7 text-stone-500">
+          어려운 말은 다 풀어썼어요. 위에서부터 하나씩 눌러 따라오면 됩니다.
+          하루에 하나, 한 번에 하나씩만 바꿔요.
         </p>
       </div>
       <ol className="grid gap-3 sm:grid-cols-2">
-        {DOCS_ORDER.map((d, i) => (
-          <li key={d.slug}>
+        {LESSONS.map((l, i) => (
+          <li key={l.slug}>
             <Link
-              href={`/docs/${d.slug}`}
-              className="flex items-center gap-3 rounded-3xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md active:scale-[0.99]"
+              href={`/docs/${l.slug}`}
+              className="flex h-full items-start gap-3 rounded-3xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md active:scale-[0.99]"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-stone-900 text-sm font-black text-white">
-                {i + 1}
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 text-xl">
+                {l.emoji}
               </span>
-              <span>
-                <span className="block text-[15px] font-bold">{d.emoji} {d.label}</span>
-                <span className="block text-[12px] text-stone-400">/docs/{d.slug}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[12px] font-bold text-stone-400">
+                  {String(i + 1).padStart(2, '0')} · {l.day} · 약 {l.minutes}분 · {LEVEL_LABEL[l.level]}
+                </span>
+                <span className="block truncate text-[15px] font-bold">{l.title}</span>
+                <span className="block truncate text-[13px] text-stone-500">{l.subtitle}</span>
               </span>
-              <span className="ml-auto font-black text-stone-300">→</span>
+              <span className="shrink-0 font-black text-stone-300">→</span>
             </Link>
           </li>
         ))}
       </ol>
-      <div className="rounded-3xl border border-sky-200 bg-sky-50 p-5 text-sm leading-7 text-sky-900">
-        💡 <b>기록 양식:</b> 매 실험마다 ①오늘의 질문 ②연결 부품 ③예상값 ④실측값
-        ⑤오차 이유 ⑥전기기사 연결을 남기세요. →{' '}
-        <Link href="/docs/09-log-template" className="font-bold underline">로그 템플릿</Link>
+      <div className="rounded-3xl border border-sky-200 bg-sky-50 p-5 text-[14px] leading-7 text-sky-900">
+        💡 <b>모르는 말이 나오면?</b> 바로{' '}
+        <Link href="/glossary" className="font-bold underline">용어 사전</Link>
+        에서 검색하세요. 2줄로 쉽게 풀어놨어요.
       </div>
     </div>
   );

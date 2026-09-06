@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/docs',
     '/curriculum',
     '/hardware',
+    '/glossary',
     '/workbook',
     '/calculator',
     '/gallery',
