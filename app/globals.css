@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-stone-50 text-stone-900 antialiased;
+  font-feature-settings: 'ss01', 'cv05';
+}
+
+/* 모바일 탭 하이라이트 제거 + 터치 타깃 */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 마크다운 본문 공통 */
+.markdown-body {
+  @apply text-[15px] leading-7 text-stone-800 sm:text-base sm:leading-8;
+  overflow-wrap: break-word;
+}
+.markdown-body h1 {
+  @apply mt-2 text-2xl font-extrabold tracking-tight text-stone-900 sm:text-3xl;
+}
+.markdown-body h2 {
+  @apply mt-10 border-l-4 border-solar-400 bg-solar-50 px-3 py-2 text-lg font-bold text-stone-900 sm:text-xl rounded-r-xl;
+}
+.markdown-body h3 {
+  @apply mt-8 text-base font-bold text-stone-900 sm:text-lg;
+}
+.markdown-body p {
+  @apply my-4;
+}
+.markdown-body ul {
+  @apply my-4 list-disc space-y-2 pl-6;
+}
+.markdown-body ol {
+  @apply my-4 list-decimal space-y-2 pl-6;
+}
+.markdown-body a {
+  @apply font-medium text-sky-700 underline decoration-sky-300 underline-offset-4 break-all hover:text-sky-900;
+}
+.markdown-body blockquote {
+  @apply my-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900;
+}
+.markdown-body code:not(pre code) {
+  @apply rounded-md bg-stone-900/90 px-1.5 py-0.5 text-[13px] font-semibold text-amber-100;
+}
+.markdown-body pre {
+  @apply my-5 overflow-x-auto rounded-2xl border border-stone-800 bg-stone-950 p-4 text-[13px] leading-6 text-stone-100 shadow-lg;
+  -webkit-overflow-scrolling: touch;
+}
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+.markdown-body table {
+  @apply my-6 block w-full overflow-x-auto rounded-2xl border border-stone-200 bg-white text-left text-sm shadow-sm;
+  -webkit-overflow-scrolling: touch;
+}
+.markdown-body thead {
+  @apply bg-stone-900 text-white;
+}
+.markdown-body th,
+.markdown-body td {
+  @apply whitespace-nowrap px-3 py-2.5 sm:whitespace-normal;
+}
+.markdown-body tbody tr {
+  @apply border-t border-stone-100 odd:bg-stone-50/60;
+}
+.markdown-body img {
+  @apply my-6 h-auto w-full rounded-2xl border border-stone-200 shadow-md;
+}
+.markdown-body hr {
+  @apply my-8 border-stone-200;
+}
+
+/* 코드 하이라이트(rehype-highlight, github-dark 유사) */
+.hljs-comment,
+.hljs-quote {
+  color: #8b949e;
+}
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #ff7b72;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition {
+  color: #a5d6ff;
+}
+.hljs-number,
+.hljs-literal {
+  color: #79c0ff;
+}
+.hljs-title,
+.hljs-section {
+  color: #d2a8ff;
+}

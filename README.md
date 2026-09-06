@@ -43,6 +43,19 @@
 - curriculum/source-index.md
 - curriculum/templates/experiment-note.md
 
+## 웹 버전 (모바일 지원)
+
+이 저장소는 Next.js 기반 반응형 웹으로도 볼 수 있다. `docs/`, `curriculum/`,
+`assets/images/`를 그대로 읽어서 렌더링하므로 마크다운만 고치면 웹에 반영된다.
+
+- 로컬 실행: `npm install` → `npm run dev`
+- 프로덕션 빌드: `npm run build` → `npm start`
+- 주요 경로: `/docs`, `/curriculum`, `/hardware`, `/workbook`(150문제),
+  `/calculator`(옴의법칙), `/gallery`(그림 6장)
+- Vercel 자동 배포: GitHub 저장소를 Vercel에 Import하면 `main` push마다 자동 배포된다.
+  환경변수 없이 동작하며, 보안 헤더는 `next.config.mjs` + `vercel.json`에 설정되어 있다.
+  `.vercel/`과 `.env*`는 절대 커밋하지 않는다.
+
 ## 큰 원칙
 
 처음에는 전기를 많이 쓰는 사람이 아니라 전기를 정확히 보는 사람이 된다.
