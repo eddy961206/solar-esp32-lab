@@ -45,6 +45,8 @@
 
 ## 웹 버전 (모바일 지원)
 
+🌐 프로덕션: https://solar-esp32-lab.vercel.app
+
 이 저장소는 Next.js 기반 반응형 웹으로도 볼 수 있다. `docs/`, `curriculum/`,
 `assets/images/`를 그대로 읽어서 렌더링하므로 마크다운만 고치면 웹에 반영된다.
 
