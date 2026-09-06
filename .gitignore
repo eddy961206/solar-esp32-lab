@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+.next/
+out/
+
+# vercel (토큰·레퍼런스 유출 방지: 이 폴더는 절대 커밋하지 마세요)
+.vercel/
+
+# env (이 프로젝트는 env 없이 동작합니다. 실수로라도 커밋 금지)
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+*.log
+.idea/
