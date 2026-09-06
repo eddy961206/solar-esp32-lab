@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { OhmTriangle } from '@/components/diagrams';
 
 export default function CalculatorPage() {
   const [voltage, setVoltage] = useState(5);
@@ -47,6 +48,7 @@ export default function CalculatorPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="space-y-5 rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
+          <OhmTriangle />
           <Slider label="전압 V" unit="V" min={0} max={12} step={0.1} value={voltage} onChange={setVoltage} />
           <Slider label="저항 R" unit="Ω" min={5} max={1000} step={1} value={resistance} onChange={setResistance} />
           <div>

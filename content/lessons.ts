@@ -31,6 +31,7 @@ export interface Lesson {
   mistakes?: LessonMistake[];
   formula?: { text: string; meaning: string }[];
   image?: string;
+  diagram?: 'panel-meter' | 'load-loop' | 'ina219' | 'i2c';
 }
 
 export const LESSONS: Lesson[] = [
@@ -228,6 +229,7 @@ export const LESSONS: Lesson[] = [
       },
     ],
     image: '/images/01-lab-overview.png',
+    diagram: 'panel-meter',
   },
   {
     slug: '05-day2-wire-and-load',
@@ -276,6 +278,7 @@ export const LESSONS: Lesson[] = [
       '빨강·검정 전선 끝이 서로 닿지 않게',
     ],
     record: ['저항값(Ω)', '연결했을 때 전압(V)', '어제(안 달았을 때) 전압과 차이'],
+    diagram: 'load-loop',
     formula: [
       { text: 'I = V ÷ R', meaning: '전류 = 전압을 저항으로 나눈 것 (예: 5V ÷ 100Ω = 0.05A)' },
       { text: 'P = V × I', meaning: '전력 = 전압 × 전류 (지금 몇 와트 쓰고 있는지)' },
@@ -332,6 +335,7 @@ export const LESSONS: Lesson[] = [
     ],
     record: ['배선 그림(글로 적기): 패널 + → ? → ? → 패널 −', '연결 후 헷갈린 점'],
     image: '/images/03-esp32-i2c-wiring.png',
+    diagram: 'ina219',
   },
   {
     slug: '07-day4-bh1750',
@@ -364,6 +368,7 @@ export const LESSONS: Lesson[] = [
     ],
     safety: ['VCC는 3.3V 핀에만 (5V 금지)', '센서 2개를 같이 꽂기 전에 하나씩 먼저 확인'],
     record: ['방 안 룩스', '창가 룩스', '손으로 가렸을 때 룩스'],
+    diagram: 'i2c',
     mistakes: [
       {
         what: '숫자가 0만 나와요',

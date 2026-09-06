@@ -6,6 +6,7 @@ export interface Term {
   easy: string;
   example?: string;
   link?: string;
+  visual?: 'series-parallel' | 'breadboard';
 }
 
 export const TERMS: Term[] = [
@@ -16,8 +17,8 @@ export const TERMS: Term[] = [
   { t: '에너지 (Wh)', cat: '기초', easy: '전력을 시간만큼 모은 양이에요. 전력×시간으로 구해요.', example: '0.25W를 4시간 쓰면 1Wh' },
   { t: '직류 (DC)', cat: '기초', easy: '한 방향으로만 흐르는 전기예요. 건전지·패널·USB가 여기에 속해요.', example: '이 실험실은 직류만 다뤄요.' },
   { t: '교류 (AC)', cat: '기초', easy: '방향이 계속 바뀌며 흐르는 전기예요. 집 콘센트(220V)가 여기에 속해요.', example: '우리는 손대지 않아요!' },
-  { t: '직렬', cat: '기초', easy: '부품들을 한 줄로 길게 잇는 거예요. 전류는 모두 같아요.', example: '패널 + → INA219 → 저항 → 패널 −', link: '/docs/06-day3-ina219' },
-  { t: '병렬', cat: '기초', easy: '부품들을 나란히 잇는 거예요. 전압은 모두 같아요.', example: '센서들은 ESP32 3.3V를 나란히 나눠 써요.' },
+  { t: '직렬', cat: '기초', easy: '부품들을 한 줄로 길게 잇는 거예요. 전류는 모두 같아요.', example: '패널 + → INA219 → 저항 → 패널 −', link: '/docs/06-day3-ina219', visual: 'series-parallel' },
+  { t: '병렬', cat: '기초', easy: '부품들을 나란히 잇는 거예요. 전압은 모두 같아요.', example: '센서들은 ESP32 3.3V를 나란히 나눠 써요.', visual: 'series-parallel' },
   { t: '개방전압 (Voc)', cat: '태양광', easy: '아무것도 안 달고 쉴 때 패널 전압이에요. 가장 높게 나와요.', example: '우리 패널은 최대 약 10.8V' },
   { t: '단락전류 (Isc)', cat: '태양광', easy: '+와 −를 직접 이으면 흐르는 최대 전류예요. 직접 이으면 안 돼요!', example: '우리 패널은 최대 약 0.61A' },
   { t: '최대전력점 (Vmp·Imp)', cat: '태양광', easy: '패널이 가장 힘 좋게 일하는 지점의 전압·전류예요.', example: '저항을 바꿔가며 찾아보는 게 수동 MPPT 실험이에요.', link: '/curriculum/volume-3-solar-power-and-exam' },
@@ -36,7 +37,7 @@ export const TERMS: Term[] = [
   { t: 'BH1750', cat: '측정', easy: '밝기를 재주는 센서예요. 3.3V 전용!', link: '/hardware/BH1750' },
   { t: '정격', cat: '안전', easy: '부품이 “이 정도까지는 버텨요”라고 보증하는 한도예요.', example: '10W 저항에 2.5W면 25%라 여유. 그래도 뜨거워요.' },
   { t: '합선 (단락)', cat: '안전', easy: '+와 −가 직접 닿아서 전기가 폭주하는 거예요. 절대 금지!', example: '패널 빨강·검정선이 닿지 않게 해요.' },
-  { t: '브레드보드', cat: '기초', easy: '납땜 없이 선을 꽂아보는 구멍판이에요. 큰 전류는 무리예요.' },
+  { t: '브레드보드', cat: '기초', easy: '납땜 없이 선을 꽂아보는 구멍판이에요. 큰 전류는 무리예요.', visual: 'breadboard' },
   { t: 'WAGO 커넥터', cat: '기초', easy: '전선을 레버로 꽉 무는 연결 부품이에요. 납땜 없이 깔끔해져요.' },
   { t: '딥슬립', cat: 'ESP32', easy: 'ESP32가 잠들었다 깨며 전기를 아끼는 절전 방법이에요. 나중에 배워요.' },
 ];

@@ -2,6 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import { TERMS, TERM_CATS } from '@/content/glossary';
+import { PHOTOS } from '@/content/photos';
+import PhotoFigure from '@/components/PhotoFigure';
+import { SeriesParallelDiagram } from '@/components/diagrams';
 
 export default function GlossarySearch() {
   const [q, setQ] = useState('');
@@ -54,6 +57,16 @@ export default function GlossarySearch() {
               <p className="mt-1.5 rounded-xl bg-stone-50 px-3 py-2 text-[13px] leading-6 text-stone-500">
                 예) {t.example}
               </p>
+            )}
+            {t.visual === 'series-parallel' && (
+              <div className="mt-2.5">
+                <SeriesParallelDiagram />
+              </div>
+            )}
+            {t.visual === 'breadboard' && (
+              <div className="mt-2.5">
+                <PhotoFigure photo={PHOTOS.breadboard} />
+              </div>
             )}
             {t.link && (
               <a href={t.link} className="mt-2 inline-block text-[13px] font-bold text-sky-700">

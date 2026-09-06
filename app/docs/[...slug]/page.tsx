@@ -4,6 +4,14 @@ import { LESSONS, LEVEL_LABEL, getLesson } from '@/content/lessons';
 import LessonSteps from '@/components/LessonSteps';
 import Callout from '@/components/Callout';
 import CopyBox from '@/components/CopyBox';
+import { PanelMeterDiagram, LoadLoopDiagram, INA219Diagram, I2CBusDiagram } from '@/components/diagrams';
+
+const DIAGRAMS: Record<string, () => React.JSX.Element> = {
+  'panel-meter': PanelMeterDiagram,
+  'load-loop': LoadLoopDiagram,
+  ina219: INA219Diagram,
+  i2c: I2CBusDiagram,
+};
 
 export function generateStaticParams() {
   return LESSONS.map((l) => ({ slug: [l.slug] }));
@@ -64,6 +72,16 @@ export default function LessonPage({ params }: { params: { slug: string[] } }) {
           <Callout kind="why" title={lesson.analogy.title}>
             {lesson.analogy.body}
           </Callout>
+        </div>
+      )}
+
+      {/* 도해 */}
+      {lesson.diagram && DIAGRAMS[lesson.diagram] && (
+        <div className="mt-5">
+          {(() => {
+            const D = DIAGRAMS[lesson.diagram as string];
+            return <D />;
+          })()}
         </div>
       )}
 

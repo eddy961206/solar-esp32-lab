@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PARTS, getPart } from '@/content/parts';
+import { PHOTOS } from '@/content/photos';
+import PhotoFigure from '@/components/PhotoFigure';
 import Callout from '@/components/Callout';
+import { LoadLoopDiagram, INA219Diagram, I2CBusDiagram, LuxScale } from '@/components/diagrams';
+
+const PART_DIAGRAMS: Record<string, () => React.JSX.Element> = {
+  'load-loop': LoadLoopDiagram,
+  ina219: INA219Diagram,
+  i2c: I2CBusDiagram,
+  lux: LuxScale,
+};
 
 export function generateStaticParams() {
   return PARTS.map((p) => ({ slug: p.slug }));
@@ -31,6 +41,21 @@ export default function PartPage({ params }: { params: { slug: string } }) {
         <h1 className="mt-2 text-[24px] font-black tracking-tight sm:text-3xl">{part.name}</h1>
         <p className="mt-2 text-[15px] leading-8 text-stone-600">{part.oneliner}</p>
       </div>
+
+      {part.photoKey && PHOTOS[part.photoKey] && (
+        <div className="mt-5">
+          <PhotoFigure photo={PHOTOS[part.photoKey]} />
+        </div>
+      )}
+
+      {part.diagram && PART_DIAGRAMS[part.diagram] && (
+        <div className="mt-5">
+          {(() => {
+            const D = PART_DIAGRAMS[part.diagram as string];
+            return <D />;
+          })()}
+        </div>
+      )}
 
       <section className="mt-5" aria-label="꼭 알 것">
         <h2 className="text-lg font-black">📌 꼭 알 것</h2>

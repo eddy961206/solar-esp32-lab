@@ -5,6 +5,8 @@ export interface Part {
   emoji: string;
   name: string;
   oneliner: string;
+  photoKey?: 'multimeter' | 'esp32' | 'resistors';
+  diagram?: 'load-loop' | 'ina219' | 'i2c' | 'lux';
   specs: { k: string; v: string }[];
   wiring: string[];
   care: string[];
@@ -15,6 +17,7 @@ export interface Part {
 export const PARTS: Part[] = [
   {
     slug: 'SNP-5MA',
+    diagram: 'load-loop',
     emoji: '☀️',
     name: '태양광 패널 SNP-5MA',
     oneliner: '햇빛을 받으면 전기가 나오는 판이에요. 이 실험의 주인공이지만, 전기를 “주는” 쪽이 아니라 “구경하는” 쪽이에요.',
@@ -39,6 +42,7 @@ export const PARTS: Part[] = [
   },
   {
     slug: 'UNI-T-UT33A+',
+    photoKey: 'multimeter',
     emoji: '🔬',
     name: '멀티미터 UT33A+',
     oneliner: '전기가 몇 볼트인지 보여주는 “전기 체온계”예요. 다이얼과 선 위치 두 개만 알면 돼요.',
@@ -61,6 +65,7 @@ export const PARTS: Part[] = [
   },
   {
     slug: 'ESP32-DevKitC',
+    photoKey: 'esp32',
     emoji: '🖥️',
     name: 'ESP32 작은 컴퓨터',
     oneliner: '센서 숫자를 읽어서 컴퓨터로 보내주는 검침원이에요. 전기는 USB로 먹고, 패널 전기는 먹지 않아요.',
@@ -90,6 +95,7 @@ export const PARTS: Part[] = [
   },
   {
     slug: 'INA219',
+    diagram: 'ina219',
     emoji: '⚡',
     name: 'INA219 전압·전류 계량기',
     oneliner: '전기가 지나가는 길 한가운데 앉아서 “몇 볼트, 몇 암페어”를 세는 톨게이트예요.',
@@ -116,6 +122,7 @@ export const PARTS: Part[] = [
   },
   {
     slug: 'BH1750',
+    diagram: 'lux',
     emoji: '💡',
     name: 'BH1750 밝기 센서',
     oneliner: '“밝다”를 룩스(lux) 숫자로 바꿔주는 눈이에요. 3.3V 전용이라는 것만 꼭 기억하세요.',
@@ -137,6 +144,7 @@ export const PARTS: Part[] = [
   },
   {
     slug: 'cement-resistors',
+    photoKey: 'resistors',
     emoji: '🧱',
     name: '시멘트 저항 (부하)',
     oneliner: '전기를 열로 바꿔 먹는 가짜 가전제품이에요. 숫자가 작을수록 많이 먹어요.',
