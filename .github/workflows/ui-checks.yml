@@ -1,0 +1,64 @@
+name: UI checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ui-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Browser checks
+        run: |
+          npm start > /tmp/solar-server.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://localhost:3000 >/dev/null && break; sleep 1; done
+          mkdir -p /tmp/solar-ui
+          node <<'JS'
+          const { chromium } = require('playwright');
+          const fs = require('node:fs');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            const errors = [];
+            page.on('pageerror', e => errors.push(String(e)));
+            for (const width of [1440, 390]) {
+              await page.setViewportSize({ width, height: 1000 });
+              for (const route of ['/', '/docs', '/docs/04-day1-panel-multimeter', '/hardware', '/curriculum', '/calculator', '/workbook', '/glossary', '/gallery']) {
+                const r = await page.goto('http://localhost:3000' + route);
+                if (!r || !r.ok()) throw new Error('Failed route: ' + route);
+                await page.waitForTimeout(500);
+                await page.screenshot({ path: '/tmp/solar-ui/' + width + '-' + (route.replaceAll('/', '_') || 'home') + '.png', fullPage: true });
+              }
+            }
+            fs.writeFileSync('/tmp/solar-ui/results.json', JSON.stringify({ errors }, null, 2));
+            await browser.close();
+            if (errors.length) throw new Error(errors.join('\n'));
+          })().catch(e => { console.error(e); process.exit(1); });
+          JS
+      - name: Collect initial review source
+        if: always()
+        run: |
+          git archive --format=tar.gz -o /tmp/solar-ui/source.tar.gz HEAD
+          tar -czf /tmp/solar-ui/runtime.tar.gz node_modules package.json package-lock.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: solar-ui-${{ github.sha }}
+          path: /tmp/solar-ui
+          retention-days: 2
