@@ -35,6 +35,12 @@ jobs:
           done
           test "$ready" = 1
           node scripts/ui-checks.mjs
+      - name: Preserve tested source
+        if: always()
+        run: |
+          mkdir -p /tmp/solar-ui
+          git archive --format=tar.gz -o /tmp/solar-ui/source.tar.gz HEAD
+          git rev-parse HEAD > /tmp/solar-ui/commit.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
