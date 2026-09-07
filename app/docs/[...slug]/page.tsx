@@ -1,196 +1,26 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LESSONS, LEVEL_LABEL, getLesson } from '@/content/lessons';
+import { DAY_VISUALS } from '@/content/journey';
 import LessonSteps from '@/components/LessonSteps';
-import Callout from '@/components/Callout';
 import CopyBox from '@/components/CopyBox';
+import LabIcon from '@/components/LabIcon';
 import { PanelMeterDiagram, LoadLoopDiagram, INA219Diagram, I2CBusDiagram } from '@/components/diagrams';
-
-const DIAGRAMS: Record<string, () => React.JSX.Element> = {
-  'panel-meter': PanelMeterDiagram,
-  'load-loop': LoadLoopDiagram,
-  ina219: INA219Diagram,
-  i2c: I2CBusDiagram,
-};
-
-export function generateStaticParams() {
-  return LESSONS.map((l) => ({ slug: [l.slug] }));
-}
-
-export async function generateMetadata({ params }: { params: { slug: string[] } }) {
-  const lesson = getLesson(params.slug[0]);
-  return { title: lesson ? lesson.title : '실험 없음' };
-}
-
-export default function LessonPage({ params }: { params: { slug: string[] } }) {
-  const lesson = getLesson(params.slug[0]);
-  if (!lesson) notFound();
-
-  const idx = LESSONS.findIndex((l) => l.slug === lesson.slug);
-  const prev = idx > 0 ? LESSONS[idx - 1] : null;
-  const next = idx < LESSONS.length - 1 ? LESSONS[idx + 1] : null;
-
-  return (
-    <article className="mx-auto max-w-3xl pt-6">
-      <nav className="flex items-center gap-1.5 text-[13px] font-semibold text-stone-400" aria-label="breadcrumb">
-        <Link href="/" className="hover:text-stone-700">홈</Link>
-        <span>/</span>
-        <Link href="/docs" className="hover:text-stone-700">실험 가이드</Link>
-        <span>/</span>
-        <span className="truncate text-stone-700">{lesson.title}</span>
-      </nav>
-
-      {/* 헤더 */}
-      <div className="mt-4 rounded-3xl border border-stone-200 bg-white p-5 shadow-sm sm:p-7">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-stone-900 px-3 py-1 text-[12px] font-black text-white">
-            {lesson.emoji} {lesson.day}
-          </span>
-          <span className="rounded-full bg-stone-100 px-3 py-1 text-[12px] font-bold text-stone-500">
-            약 {lesson.minutes}분 · {LEVEL_LABEL[lesson.level]}
-          </span>
-        </div>
-        <h1 className="mt-3 text-[24px] font-black leading-[1.25] tracking-tight sm:text-3xl">
-          {lesson.title}
-        </h1>
-        <p className="mt-1.5 text-[15px] text-stone-500">{lesson.subtitle}</p>
-        <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p className="text-[13px] font-black text-emerald-800">🏁 성공 기준</p>
-          <p className="mt-1 text-[14px] leading-7 text-emerald-950">{lesson.goal}</p>
-        </div>
-      </div>
-
-      {/* 이야기 */}
-      <div className="mt-5 space-y-3 text-[15px] leading-8 text-stone-700">
-        {lesson.story.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
-      </div>
-
-      {lesson.analogy && (
-        <div className="mt-5">
-          <Callout kind="why" title={lesson.analogy.title}>
-            {lesson.analogy.body}
-          </Callout>
-        </div>
-      )}
-
-      {/* 도해 */}
-      {lesson.diagram && DIAGRAMS[lesson.diagram] && (
-        <div className="mt-5">
-          {(() => {
-            const D = DIAGRAMS[lesson.diagram as string];
-            return <D />;
-          })()}
-        </div>
-      )}
-
-      {/* 준비물 */}
-      {lesson.prepare.length > 0 && (
-        <section className="mt-8" aria-label="준비물">
-          <h2 className="text-lg font-black">🎒 준비물</h2>
-          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-            {lesson.prepare.map((p) => (
-              <li key={p} className="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[14px] font-semibold shadow-sm">
-                ☐ {p}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* 단계 */}
-      {lesson.steps.length > 0 && (
-        <section className="mt-8" aria-label="따라하기">
-          <h2 className="text-lg font-black">👣 따라하기</h2>
-          <p className="mt-1 text-[13px] text-stone-500">끝낸 단계는 눌러서 체크하세요. 기록은 이 기기에만 저장돼요.</p>
-          <div className="mt-3">
-            <LessonSteps slug={lesson.slug} steps={lesson.steps} />
-          </div>
-        </section>
-      )}
-
-      {/* 공식 */}
-      {lesson.formula && (
-        <section className="mt-8 grid gap-2 sm:grid-cols-2" aria-label="필요한 계산">
-          {lesson.formula.map((f) => (
-            <div key={f.text} className="rounded-2xl bg-stone-900 p-4 text-white shadow">
-              <p className="text-lg font-black tracking-tight">{f.text}</p>
-              <p className="mt-1 text-[13px] leading-6 text-stone-300">{f.meaning}</p>
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* 기록 도우미 (로그 레슨) */}
-      {lesson.slug === '09-log-template' && (
-        <div className="mt-6">
-          <CopyBox text="시간,전압(V),전류(mA),전력(mW),밝기(lux),메모" label="컴퓨터용 기록 첫 줄 (CSV)" />
-        </div>
-      )}
-
-      {/* 안전 */}
-      {lesson.safety.length > 0 && (
-        <div className="mt-6">
-          <Callout kind="safety" title="조심할 점">
-            <ul className="list-disc space-y-1 pl-5">
-              {lesson.safety.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-          </Callout>
-        </div>
-      )}
-
-      {/* 기록 항목 */}
-      {lesson.record.length > 0 && (
-        <section className="mt-6 rounded-3xl border border-sky-200 bg-sky-50 p-4" aria-label="적어두기">
-          <p className="text-sm font-black text-sky-900">🧾 적어두기</p>
-          <ul className="mt-1.5 list-disc space-y-1 pl-5 text-[14px] leading-7 text-sky-950">
-            {lesson.record.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* 실수 */}
-      {lesson.mistakes && lesson.mistakes.length > 0 && (
-        <section className="mt-8" aria-label="실수 해결">
-          <h2 className="text-lg font-black">🩹 이런 일 생기면</h2>
-          <div className="mt-3 space-y-2.5">
-            {lesson.mistakes.map((m) => (
-              <details key={m.what} className="group rounded-2xl border border-stone-200 bg-white shadow-sm">
-                <summary className="cursor-pointer list-none px-4 py-3.5 text-[15px] font-bold active:bg-stone-50">
-                  <span className="mr-2 text-red-500">●</span>
-                  {m.what}
-                  <span className="float-right text-stone-300 group-open:rotate-90">›</span>
-                </summary>
-                <div className="border-t border-stone-100 px-4 py-3 text-[14px] leading-7">
-                  <p><b>왜 그래요?</b> {m.why}</p>
-                  <p className="mt-1 rounded-xl bg-emerald-50 px-3 py-2"><b>이렇게 하세요.</b> {m.fix}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 이전/다음 */}
-      <div className="mt-8 grid grid-cols-2 gap-2">
-        {prev ? (
-          <Link href={`/docs/${prev.slug}`} className="rounded-2xl border border-stone-200 bg-white px-4 py-4 text-sm font-bold shadow-sm">
-            <span className="block text-[11px] font-medium text-stone-400">← 이전</span>
-            {prev.emoji} {prev.title}
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link href={`/docs/${next.slug}`} className="rounded-2xl bg-stone-900 px-4 py-4 text-sm font-bold text-white shadow">
-            <span className="block text-[11px] font-medium text-stone-400">다음 →</span>
-            {next.emoji} {next.title}
-          </Link>
-        ) : <span />}
-      </div>
-    </article>
-  );
+const DIAGRAMS:Record<string,()=>React.JSX.Element>={'panel-meter':PanelMeterDiagram,'load-loop':LoadLoopDiagram,ina219:INA219Diagram,i2c:I2CBusDiagram};
+export function generateStaticParams(){return LESSONS.map(l=>({slug:[l.slug]}));}
+export async function generateMetadata({params}:{params:{slug:string[]}}){return {title:getLesson(params.slug[0])?.title||'실험 없음'};}
+export default function LessonPage({params}:{params:{slug:string[]}}){
+  const lesson=params.slug.length===1?getLesson(params.slug[0]):undefined;if(!lesson)notFound();
+  const idx=LESSONS.findIndex(l=>l.slug===lesson.slug);const prev=LESSONS[idx-1];const next=LESSONS[idx+1];const Diagram=lesson.diagram?DIAGRAMS[lesson.diagram]:null;
+  return <div className="lesson-layout"><aside className="lesson-sidebar"><strong>나의 실험 순서</strong><nav aria-label="전체 실험 순서">{LESSONS.map((l,i)=><Link key={l.slug} href={`/docs/${l.slug}`} aria-current={l.slug===lesson.slug?'page':undefined}><span>{String(i+1).padStart(2,'0')}</span>{DAY_VISUALS[l.slug]?.title||l.title}</Link>)}</nav><div className="sidebar-tools"><Link href="/hardware"><LabIcon name="chip" size={15}/>부품 도감</Link><Link href="/glossary"><LabIcon name="book" size={15}/>용어 사전</Link><Link href="/calculator"><LabIcon name="calculator" size={15}/>전력 계산기</Link></div></aside><article className="lesson-main"><nav className="lab-breadcrumb" aria-label="현재 위치"><Link href="/">홈</Link><LabIcon name="chevron" size={12}/><Link href="/docs">실험하기</Link><LabIcon name="chevron" size={12}/><span>{lesson.day}</span></nav><h1>{lesson.title}</h1><div className="lesson-meta"><span>{lesson.day}</span><span><LabIcon name="clock" size={15}/>약 {lesson.minutes}분</span><span>{LEVEL_LABEL[lesson.level]}</span></div><p className="lesson-intro">{lesson.subtitle}</p><div className="lesson-goal"><LabIcon name="check"/><div><b>오늘은 이것만 할 수 있으면 성공</b><p>{lesson.goal}</p></div></div>
+  {lesson.safety.length>0&&<aside className="lesson-safety"><b><LabIcon name="shield" size={18}/>시작 전, 꼭 확인</b><ul>{lesson.safety.map(s=><li key={s}>{s}</li>)}</ul></aside>}
+  {lesson.prepare.length>0&&<section className="lesson-section" aria-labelledby="materials-title"><h2 id="materials-title">준비물부터 확인해요</h2><p>책상 위에 준비한 항목을 체크해 보세요. 이 체크는 새로고침하면 초기화돼요.</p><div className="lesson-materials">{lesson.prepare.map(p=><label key={p}><input type="checkbox"/><span>{p}</span></label>)}</div></section>}
+  {Diagram&&<section className="lesson-section" aria-labelledby="diagram-title"><h2 id="diagram-title">연결 모습, 먼저 눈으로 확인</h2><p>글을 읽다가 헷갈리면 이 그림으로 돌아오세요. 실제 보드의 핀 표기도 반드시 확인해요.</p><Diagram/></section>}
+  {lesson.story.length>0&&<details className="lesson-extra"><summary>왜 이렇게 실험하나요? · 배경 설명</summary><div className="lesson-extra-body">{lesson.story.map((p,i)=><p key={i}>{p}</p>)}{lesson.analogy&&<p><b>{lesson.analogy.title}</b><br/>{lesson.analogy.body}</p>}</div></details>}
+  {lesson.steps.length>0&&<section className="lesson-section" aria-labelledby="steps-title"><h2 id="steps-title">이제, 한 단계씩 따라해요</h2><p>내용을 읽는 것과 완료 표시는 별개예요. 직접 해본 뒤 완료 버튼을 누르세요.</p><LessonSteps key={lesson.slug} slug={lesson.slug} steps={lesson.steps}/></section>}
+  {lesson.formula&&<section className="lesson-section"><h2>이번 실험에 쓰는 계산</h2><div className="formula-grid">{lesson.formula.map(f=><div key={f.text}><b>{f.text}</b><p>{f.meaning}</p></div>)}</div><Link href="/calculator" className="text-link">계산기로 직접 확인<LabIcon name="arrow" size={16}/></Link></section>}
+  {lesson.slug==='09-log-template'&&<CopyBox text="시간,전압(V),전류(mA),전력(mW),밝기(lux),메모" label="컴퓨터용 기록 첫 줄 (CSV)"/>}
+  {lesson.record.length>0&&<section className="lesson-section"><h2>오늘의 기록</h2><div className="lesson-extra-body"><ul className="list-disc pl-5">{lesson.record.map(r=><li key={r}>{r}</li>)}</ul></div></section>}
+  {lesson.mistakes&&lesson.mistakes.length>0&&<section className="lesson-section"><h2>예상과 다르게 보인다면</h2>{lesson.mistakes.map(m=><details className="lesson-extra" key={m.what}><summary>{m.what}</summary><div className="lesson-extra-body"><p><b>원인</b><br/>{m.why}</p><p><b>이렇게 확인해요</b><br/>{m.fix}</p></div></details>)}</section>}
+  <nav className="lesson-nav" aria-label="이전 다음 실험">{prev?<Link href={`/docs/${prev.slug}`}><small>이전 단계</small>{prev.title}</Link>:<span/>}{next?<Link href={`/docs/${next.slug}`}><small>다음 단계</small>{next.title}</Link>:<Link href="/docs"><small>실험 둘러보기</small>전체 실험으로 돌아가기</Link>}</nav></article></div>;
 }

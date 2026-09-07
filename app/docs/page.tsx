@@ -1,46 +1,9 @@
 import Link from 'next/link';
-import { LESSONS, LEVEL_LABEL } from '@/content/lessons';
-
-export const metadata = { title: '실험 가이드' };
-
+import { LESSONS } from '@/content/lessons';
+import CourseJourney from '@/components/CourseJourney';
+import LabIcon from '@/components/LabIcon';
+export const metadata = { title: '5일 실험 가이드' };
 export default function DocsIndex() {
-  return (
-    <div className="space-y-6 pt-6">
-      <div>
-        <p className="text-[13px] font-bold text-amber-700">🧪 HANDS-ON · 따라하기</p>
-        <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">실험 가이드</h1>
-        <p className="mt-2 text-[15px] leading-7 text-stone-500">
-          어려운 말은 다 풀어썼어요. 위에서부터 하나씩 눌러 따라오면 됩니다.
-          하루에 하나, 한 번에 하나씩만 바꿔요.
-        </p>
-      </div>
-      <ol className="grid gap-3 sm:grid-cols-2">
-        {LESSONS.map((l, i) => (
-          <li key={l.slug}>
-            <Link
-              href={`/docs/${l.slug}`}
-              className="flex h-full items-start gap-3 rounded-3xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md active:scale-[0.99]"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 text-xl">
-                {l.emoji}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[12px] font-bold text-stone-400">
-                  {String(i + 1).padStart(2, '0')} · {l.day} · 약 {l.minutes}분 · {LEVEL_LABEL[l.level]}
-                </span>
-                <span className="block truncate text-[15px] font-bold">{l.title}</span>
-                <span className="block truncate text-[13px] text-stone-500">{l.subtitle}</span>
-              </span>
-              <span className="shrink-0 font-black text-stone-300">→</span>
-            </Link>
-          </li>
-        ))}
-      </ol>
-      <div className="rounded-3xl border border-sky-200 bg-sky-50 p-5 text-[14px] leading-7 text-sky-900">
-        💡 <b>모르는 말이 나오면?</b> 바로{' '}
-        <Link href="/glossary" className="font-bold underline">용어 사전</Link>
-        에서 검색하세요. 2줄로 쉽게 풀어놨어요.
-      </div>
-    </div>
-  );
+  const days=LESSONS.filter(l=>l.day.startsWith('Day')).map(l=>({slug:l.slug,day:l.day,title:l.title,minutes:l.minutes,goal:l.goal,count:l.steps.length,prepare:l.prepare}));
+  return <div><header className="lab-page-head"><nav className="lab-breadcrumb" aria-label="현재 위치"><Link href="/">홈</Link><LabIcon name="chevron" size={12}/><span>실험하기</span></nav><h1>처음부터, 하나씩 따라해요.</h1><p>오늘은 한 가지 목표만. 준비물을 확인하고, 그림을 보고, 한 단계씩 진행해요. 다섯 번의 실험이 끝나면 햇빛을 직접 측정하고 기록할 수 있어요.</p></header><div className="preparation-row"><Link href="/docs/01-project-overview"><LabIcon name="sun"/><span><strong>전체 흐름 이해하기</strong><small>어떤 실험인지 먼저 알아봐요</small></span><LabIcon name="arrow"/></Link><Link href="/docs/02-safety-rules"><LabIcon name="shield"/><span><strong>안전 수칙 확인하기</strong><small>실험 전, 반드시 읽어주세요</small></span><LabIcon name="arrow"/></Link><Link href="/docs/03-inventory"><LabIcon name="grid"/><span><strong>준비물 확인하기</strong><small>필요한 부품과 도구를 살펴봐요</small></span><LabIcon name="arrow"/></Link></div><CourseJourney lessons={days}/><section className="lab-section"><div className="section-heading"><div><h2>기록하거나, 막히거나, 더 하고 싶을 때</h2><p>실험 중 필요한 내용만 찾아보세요.</p></div></div><div className="reference-list">{LESSONS.slice(8).map(l=><Link key={l.slug} href={`/docs/${l.slug}`}><div><b>{l.title}</b><p>{l.subtitle}</p></div><LabIcon name="arrow"/></Link>)}</div></section></div>;
 }

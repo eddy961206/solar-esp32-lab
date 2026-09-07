@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import './globals.css';
+import './lab.css';
 
 export const metadata: Metadata = {
   title: {
@@ -26,15 +27,16 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#f59e0b',
+  themeColor: '#286246',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body className="min-h-dvh flex flex-col">
+        <a href="#main-content" className="skip-link">본문으로 바로가기</a>
         <Header />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-10 sm:px-6">{children}</main>
+        <main id="main-content" tabIndex={-1} className="lab-main">{children}</main>
         <Footer />
       </body>
     </html>

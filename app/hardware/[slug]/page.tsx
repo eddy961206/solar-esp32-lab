@@ -2,7 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PARTS, getPart } from '@/content/parts';
 import { PHOTOS } from '@/content/photos';
+import { PART_VISUALS } from '@/content/journey';
 import PhotoFigure from '@/components/PhotoFigure';
+import PartArt from '@/components/PartArt';
+import LabIcon from '@/components/LabIcon';
 import Callout from '@/components/Callout';
 import { LoadLoopDiagram, INA219Diagram, I2CBusDiagram, LuxScale } from '@/components/diagrams';
 
@@ -12,104 +15,36 @@ const PART_DIAGRAMS: Record<string, () => React.JSX.Element> = {
   i2c: I2CBusDiagram,
   lux: LuxScale,
 };
-
 export function generateStaticParams() {
-  return PARTS.map((p) => ({ slug: p.slug }));
+  return PARTS.map(p => ({ slug: p.slug }));
 }
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const part = getPart(params.slug);
-  return { title: part ? part.name : '부품 없음' };
+  return { title: getPart(params.slug)?.name || '부품 없음' };
 }
-
 export default function PartPage({ params }: { params: { slug: string } }) {
   const part = getPart(params.slug);
   if (!part) notFound();
-
-  return (
-    <article className="mx-auto max-w-3xl pt-6">
-      <nav className="flex items-center gap-1.5 text-[13px] font-semibold text-stone-400" aria-label="breadcrumb">
-        <Link href="/" className="hover:text-stone-700">홈</Link>
-        <span>/</span>
-        <Link href="/hardware" className="hover:text-stone-700">부품 도감</Link>
-        <span>/</span>
-        <span className="truncate text-stone-700">{part.name}</span>
-      </nav>
-
-      <div className="mt-4 rounded-3xl border border-stone-200 bg-white p-5 shadow-sm sm:p-7">
-        <p className="text-4xl">{part.emoji}</p>
-        <h1 className="mt-2 text-[24px] font-black tracking-tight sm:text-3xl">{part.name}</h1>
-        <p className="mt-2 text-[15px] leading-8 text-stone-600">{part.oneliner}</p>
-      </div>
-
-      {part.photoKey && PHOTOS[part.photoKey] && (
-        <div className="mt-5">
-          <PhotoFigure photo={PHOTOS[part.photoKey]} />
-        </div>
-      )}
-
-      {part.diagram && PART_DIAGRAMS[part.diagram] && (
-        <div className="mt-5">
-          {(() => {
-            const D = PART_DIAGRAMS[part.diagram as string];
-            return <D />;
-          })()}
-        </div>
-      )}
-
-      <section className="mt-5" aria-label="꼭 알 것">
-        <h2 className="text-lg font-black">📌 꼭 알 것</h2>
-        <dl className="mt-3 overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-          {part.specs.map((s, i) => (
-            <div key={s.k} className={`grid grid-cols-[110px_1fr] gap-2 px-4 py-3 text-[14px] leading-6 ${i % 2 ? 'bg-stone-50/70' : 'bg-white'}`}>
-              <dt className="font-black text-stone-500">{s.k}</dt>
-              <dd className="font-semibold">{s.v}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section className="mt-6" aria-label="이렇게 연결해요">
-        <h2 className="text-lg font-black">🔌 이렇게 연결해요</h2>
-        <ol className="mt-3 space-y-2">
-          {part.wiring.map((w, i) => (
-            <li key={w} className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[14px] font-semibold shadow-sm">
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-stone-900 text-[12px] font-black text-white">{i + 1}</span>
-              {w}
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <div className="mt-6">
-        <Callout kind="safety" title="조심할 점">
-          <ul className="list-disc space-y-1 pl-5">
-            {part.care.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-        </Callout>
-      </div>
-
-      <section className="mt-6" aria-label="안 될 때">
-        <h2 className="text-lg font-black">🩹 안 될 때 체크</h2>
-        <ul className="mt-3 space-y-2">
-          {part.troubleshoot.map((t) => (
-            <li key={t} className="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-[14px] leading-7 shadow-sm">
-              {t}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <div className="mt-6 grid grid-cols-2 gap-2">
-        <Link href="/hardware" className="rounded-2xl border border-stone-200 bg-white px-4 py-3.5 text-center text-sm font-bold">
-          ← 도감 목록
-        </Link>
-        <Link href="/glossary" className="rounded-2xl bg-stone-900 px-4 py-3.5 text-center text-sm font-bold text-white">
-          모르는 말 찾기 →
-        </Link>
-      </div>
-    </article>
-  );
+  const visual = PART_VISUALS[part.slug];
+  const Diagram = part.diagram ? PART_DIAGRAMS[part.diagram] : null;
+  return <article className="mx-auto max-w-3xl pt-8">
+    <nav className="lab-breadcrumb" aria-label="현재 위치">
+      <Link href="/">홈</Link><LabIcon name="chevron" size={12}/>
+      <Link href="/hardware">부품 도감</Link><LabIcon name="chevron" size={12}/><span>{part.name}</span>
+    </nav>
+    <header className="part-detail-head">
+      <div><p className="part-role">{visual?.role}</p><h1>{part.name}</h1><p>{visual?.summary || part.oneliner}</p></div>
+      <div className="part-detail-art"><PartArt kind={visual?.kind || 'panel'}/><span>역할을 이해하는 개념 그림 · 실제 핀 배열 아님</span></div>
+    </header>
+    <Callout kind="safety" title="연결 전에 확인해요"><ul className="list-disc space-y-1 pl-5">{part.care.map(c => <li key={c}>{c}</li>)}</ul></Callout>
+    {part.photoKey && PHOTOS[part.photoKey] && <section className="lesson-section"><h2>실물 참고 사진</h2><PhotoFigure photo={PHOTOS[part.photoKey]}/></section>}
+    {Diagram && <section className="lesson-section"><h2>연결 모습 이해하기</h2><p>그림으로 흐름을 익히고, 실제 기판의 핀 이름과 제품 설명서를 확인하세요.</p><Diagram/></section>}
+    <section className="lesson-section"><h2>꼭 알 것</h2>
+      <dl className="overflow-hidden rounded-xl border border-stone-200 bg-white">
+        {part.specs.map((s,i) => <div key={s.k} className={`grid grid-cols-[100px_minmax(0,1fr)] gap-3 px-4 py-3 text-sm leading-7 ${i % 2 ? 'bg-stone-50' : ''}`}><dt className="font-semibold text-stone-500">{s.k}</dt><dd>{s.v}</dd></div>)}
+      </dl>
+    </section>
+    <section className="lesson-section"><h2>이렇게 연결해요</h2><ol className="space-y-3">{part.wiring.map((w,i) => <li key={w} className="flex items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 text-sm leading-7"><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-green-50 text-xs font-bold text-green-800">{i+1}</span><span>{w}</span></li>)}</ol></section>
+    <section className="lesson-section"><h2>안 될 때 체크</h2><ul className="list-disc space-y-2 pl-5 text-sm leading-8">{part.troubleshoot.map(t => <li key={t}>{t}</li>)}</ul></section>
+    <nav className="lesson-nav" aria-label="부품 학습 이동"><Link href="/hardware"><small>다른 부품도 살펴보기</small>부품 도감으로</Link><Link href="/docs"><small>준비됐다면</small>실험 가이드로</Link></nav>
+  </article>;
 }

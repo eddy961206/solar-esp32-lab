@@ -1,59 +1,6 @@
 import Link from 'next/link';
 import { CURRICULUM_ORDER } from '@/lib/content';
-import { CURR_SUMMARIES } from '@/content/curriculum';
-
-export const metadata = { title: '읽을거리' };
-
-export default function CurriculumIndex() {
-  return (
-    <div className="space-y-6 pt-6">
-      <div>
-        <p className="text-[13px] font-bold text-sky-700">📚 READ MORE · 실험 뒤에 읽어요</p>
-        <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">읽을거리</h1>
-        <p className="mt-2 text-[15px] leading-7 text-stone-500">
-          길어 보이는 글도 걱정 마세요. 각 글 맨 위에 30초 요약을 붙여놨어요.
-          요약만 읽어도 되고, 원문은 접어뒀다가 펼치면 돼요.
-        </p>
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {CURRICULUM_ORDER.map((c) => {
-          const s = CURR_SUMMARIES[c.slug];
-          return (
-            <Link
-              key={c.slug}
-              href={`/curriculum/${c.slug}`}
-              className="rounded-3xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md active:scale-[0.99]"
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-100 to-sky-100 text-2xl">
-                  {c.emoji}
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-[15px] font-bold">{c.label}</span>
-                  <span className="block truncate text-[13px] text-stone-500">{c.desc}</span>
-                </span>
-                <span className="ml-auto shrink-0 font-black text-stone-300">→</span>
-              </div>
-              {s && (
-                <p className="mt-2.5 line-clamp-2 rounded-2xl bg-stone-50 px-3 py-2 text-[13px] leading-6 text-stone-600">
-                  {s.lines[0]}
-                </p>
-              )}
-            </Link>
-          );
-        })}
-        <Link
-          href="/curriculum/experiment-note"
-          className="flex items-center gap-3 rounded-3xl border border-dashed border-stone-300 bg-stone-50 p-4"
-        >
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-2xl">🧾</span>
-          <span className="min-w-0">
-            <span className="block text-[15px] font-bold">실험 노트 양식</span>
-            <span className="block truncate text-[13px] text-stone-500">매번 같은 순서로 적어요</span>
-          </span>
-          <span className="ml-auto shrink-0 font-black text-stone-300">→</span>
-        </Link>
-      </div>
-    </div>
-  );
-}
+import LabIcon from '@/components/LabIcon';
+export const metadata={title:'더 배우기'};
+const TOPICS=['전압 · 전류\n저항 · 전력','센서 · 코드\n연결 · 기록','태양광 · 에너지\n전기기사 기초'];
+export default function CurriculumIndex(){return <div><header className="lab-page-head"><nav className="lab-breadcrumb" aria-label="현재 위치"><Link href="/">홈</Link><LabIcon name="chevron" size={12}/><span>더 배우기</span></nav><h1>해보니 궁금해지는, 그다음 이야기.</h1><p>모두 읽고 실험을 시작할 필요는 없어요. 직접 해본 뒤 궁금해진 주제부터 골라보세요. 각 글은 짧은 요약과 자세한 원문으로 나뉘어 있어요.</p></header><div className="reading-volumes">{CURRICULUM_ORDER.slice(0,3).map((c,i)=><Link href={`/curriculum/${c.slug}`} className="reading-volume" key={c.slug}><div className="reading-cover"><strong>0{i+1}</strong><span>{TOPICS[i].split('\n').map(line=><span className="block" key={line}>{line}</span>)}</span></div><h2>{c.label}</h2><p>{c.desc}</p><span className="text-link">책 펼치기<LabIcon name="arrow" size={16}/></span></Link>)}</div><section className="lab-feature"><div><h2>글보다 그림이 편하다면.</h2><p>전체 실험 구조부터 센서 연결, 안전 경계까지. 여섯 장의 그림을 크게 펼쳐 살펴보세요.</p><Link className="lab-button primary" href="/gallery">그림 자료실 열기<LabIcon name="expand" size={17}/></Link></div>{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/images/01-lab-overview.png" alt="태양광 패널, 센서, ESP32의 전체 연결을 설명하는 기존 학습 그림" width={1200} height={800} loading="lazy"/></section><section className="lab-section"><div className="section-heading"><div><h2>필요한 만큼만, 더 살펴보기</h2></div></div><div className="reference-list">{CURRICULUM_ORDER.slice(3).filter(c=>c.slug!=='visual-guide').map(c=><Link href={`/curriculum/${c.slug}`} key={c.slug}><div><b>{c.label}</b><p>{c.desc}</p></div><LabIcon name="arrow" size={18}/></Link>)}<Link href="/curriculum/experiment-note"><div><b>실험 노트 양식</b><p>측정한 것과 발견한 것을 같은 순서로 기록해요.</p></div><LabIcon name="arrow" size={18}/></Link></div></section></div>;}

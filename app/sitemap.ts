@@ -13,6 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/workbook',
     '/calculator',
     '/gallery',
+    '/tools',
+    '/curriculum/experiment-note',
     ...DOCS_ORDER.map((d) => `/docs/${d.slug}`),
     ...CURRICULUM_ORDER.map((c) => `/curriculum/${c.slug}`),
     ...HARDWARE_ORDER.map((h) => `/hardware/${h.slug}`),
