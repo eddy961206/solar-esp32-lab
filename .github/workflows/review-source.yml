@@ -1,0 +1,18 @@
+name: Review source snapshot
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/review-source.yml']
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git archive --format=tar.gz -o /tmp/solar-source.tar.gz HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: solar-source
+          path: /tmp/solar-source.tar.gz
+          retention-days: 1
