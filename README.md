@@ -1,65 +1,50 @@
-# 원룸 태양광 실험실
+# 태양광 작업대
 
-이 문서는 SNP-5MA(6V 5W 태양광 패널), UNI-T UT33A+, ESP32 DevKitC, INA219, BH1750, 브레드보드, 시멘트 저항을 사용해서 안전하게 전기를 측정하고 기록하는 첫 프로젝트를 진행하기 위한 안내서다.
+서랍 속 태양광 키트(SNP-5MA 패널, UT33A+ 멀티미터, ESP32 DevKitC, INA219, BH1750, 시멘트 저항)로 전기를 **작동시키면서** 배우는 미션형 실습 사이트.
 
-## 목표
+🌐 https://solar-esp32-lab.vercel.app
 
-1. 사용자는 태양광 패널의 극성(+/-)을 구분할 수 있다.
-2. 사용자는 멀티미터로 태양광 패널의 DC 전압을 안전하게 측정할 수 있다.
-3. 사용자는 INA219로 태양광 패널의 전압과 전류를 읽을 수 있다.
-4. 사용자는 ESP32로 측정값을 읽고 시리얼로 출력할 수 있다.
-5. 사용자는 맥미니 또는 우분투 노트북에서 측정 로그를 저장할 수 있다.
+## 배우는 방식
 
-## 문서 순서
+- 미션마다 **오늘 작동시킬 것** 하나. 진도는 퀴즈가 아니라 "작동했나", "하나 바꿔봤나"로 센다.
+- **3D 작업대**에서 실제 부품 배치와 전류의 흐름(노란 알갱이)을 먼저 본다. 햇빛과 저항을 바꾸면 숫자·I-V 곡선·공식이 같이 바뀐다.
+- 부품마다 **이게 뭐야 / 어떻게 동작해 / 어떻게 써** 세 줄 설명. 3D에서 부품을 누르면 나온다.
+- 원리는 **지금 필요한 한 가지**만, 발견의 이야기와 함께. 궁금한 가지는 **나중에 볼 가지**에 적어 둔다.
+- 기본 공식(V=IR, P=VI, P=I²R, E=Pt)은 화면의 지금 숫자를 넣어 체화한다. 부품·현상의 성질은 **특성 카드**에.
+- 같은 회로를 **회로도**로도 나란히 보여준다.
 
-- docs/01-project-overview.md
-- docs/02-safety-rules.md
-- docs/03-inventory.md
-- docs/04-day1-panel-multimeter.md
-- docs/05-day2-wire-and-load.md
-- docs/06-day3-ina219.md
-- docs/07-day4-bh1750.md
-- docs/08-day5-esp32-serial.md
-- docs/09-log-template.md
-- docs/10-common-mistakes.md
-- docs/11-next-steps.md
+## 미션
 
-## 확장 학습서
+1. 패널 깨우기 — 멀티미터로 쉴 때 전압
+2. 전기에게 일 시키기 — 시멘트 저항과 옴의 법칙
+3. 전류를 숫자로 — INA219 + ESP32 시리얼
+4. 빛을 숫자로 — BH1750, I2C 버스 공유
+5. 맥미니에 기록하기 — USB 시리얼을 CSV로
 
-전기 초심자가 태양광, ESP32, 아두이노식 IoT 실험을 재미있게 따라가면서 전기기사 기초 감각까지 같이 키울 수 있도록 `curriculum/` 아래에 3권짜리 학습서 구조를 추가했다.
+그다음 길(뚝딱이 지도): 회로도 읽고 그리기 → 움직이게 하기 → 3D 프린팅·CAD → AI와 함께하는 나만의 작업실(미니 컨베이어 벨트).
 
-![원룸 태양광 실험실 개요](assets/images/01-lab-overview.png)
+## 구조
 
-- curriculum/README.md
-- curriculum/visual-guide.md
-- curriculum/expanded-study-pack.md
-- curriculum/workbook-150-questions.md
-- curriculum/macos-arduino-esp32-setup.md
-- curriculum/volume-1-electricity-basics.md
-- curriculum/volume-2-esp32-iot.md
-- curriculum/volume-3-solar-power-and-exam.md
-- curriculum/project-atlas-60.md
-- curriculum/electrician-exam-bridge.md
-- curriculum/source-index.md
-- curriculum/templates/experiment-note.md
+| 경로 | 내용 |
+|---|---|
+| `content/missions.ts` | 미션 단계·코드·원리·가지 |
+| `content/guide.ts` | 부품의 역할·원리·사용법 |
+| `content/parts.ts`, `docs/hardware/`, `docs/03-inventory.md` | 보유 부품과 숫자 스펙(원본) |
+| `content/formulas.ts` | 체화할 공식과 특성 카드 |
+| `content/roadmap.ts` | 뚝딱이 지도 |
+| `lib/solar.ts` | 패널 사양으로 만든 I-V 근사 모델(Vmp≈9V, 5W) |
+| `components/LabScene.tsx` | three.js 3D 작업대 |
+| `components/Schematic.tsx` | 미션별 회로도 |
 
-## 웹 버전 (모바일 지원)
+`docs/`의 일차별 안내와 `curriculum/`의 예전 학습서는 참고 자료로 저장소에 남아 있고, 사이트에는 미션으로 다시 정리됐다. 진도·메모는 브라우저 localStorage에만 저장한다.
 
-🌐 프로덕션: https://solar-esp32-lab.vercel.app
+## 실행
 
-이 저장소는 Next.js 기반 반응형 웹으로도 볼 수 있다. `docs/`, `curriculum/`,
-`assets/images/`를 그대로 읽어서 렌더링하므로 마크다운만 고치면 웹에 반영된다.
+```sh
+npm install
+npm run dev
+```
 
-- 로컬 실행: `npm install` → `npm run dev`
-- 프로덕션 빌드: `npm run build` → `npm start`
-- 주요 경로: `/docs`, `/curriculum`, `/hardware`, `/workbook`(150문제),
-  `/calculator`(옴의법칙), `/gallery`(그림 6장)
-- Vercel 자동 배포: GitHub 저장소를 Vercel에 Import하면 `main` push마다 자동 배포된다.
-  환경변수 없이 동작하며, 보안 헤더는 `next.config.mjs` + `vercel.json`에 설정되어 있다.
-  `.vercel/`과 `.env*`는 절대 커밋하지 않는다.
+## 안전
 
-## 큰 원칙
-
-처음에는 전기를 많이 쓰는 사람이 아니라 전기를 정확히 보는 사람이 된다.
-
-이 저장소의 실습은 낮은 전압 DC 실험, 센서 측정, 로그 기록, 계산 연습을 중심으로 한다. 220V 콘센트, 배전반, 인버터, 리튬 배터리 충전 회로의 장시간 무인 운전은 이 문서만 보고 진행하지 않는다.
+낮은 전압 직류만 다룬다. 220V 콘센트, 배전반, 인버터, 리튬 배터리 충전 회로는 이 사이트만 보고 진행하지 않는다. 자세한 규칙은 `docs/02-safety-rules.md`.
