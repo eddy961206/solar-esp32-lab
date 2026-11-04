@@ -1,18 +1,52 @@
 import Link from 'next/link';
-import { LESSONS } from '@/content/lessons';
-import { PARTS } from '@/content/parts';
-import SolarPlayground from '@/components/SolarPlayground';
-import CourseJourney from '@/components/CourseJourney';
-import PartCard from '@/components/PartCard';
-import LabIcon from '@/components/LabIcon';
+import { MISSIONS } from '@/content/missions';
+import { ROADMAP } from '@/content/roadmap';
+import MissionStatus from '@/components/MissionStatus';
 
 export default function Home() {
-  const lessons = LESSONS.filter(l=>l.day.startsWith('Day')).map(l=>({slug:l.slug,day:l.day,title:l.title,minutes:l.minutes,goal:l.goal,count:l.steps.length,prepare:l.prepare}));
-  return <div className="lab-home">
-    <section className="lab-hero"><div className="lab-hero-copy"><h1>햇빛이 만드는 전기,<br/><span>직접 확인하는 재미.</span></h1><p>작은 패널로 전압을 재고, 센서로 읽고,<br className="desktop-break"/> ESP32로 기록하는 다섯 번의 실험.<br/>처음이라면 첫 번째 단계부터 함께해요.</p><Link href="/docs/02-safety-rules" className="lab-button primary hero-action">안전 확인하고 시작하기<LabIcon name="arrow"/></Link><Link href="/docs/01-project-overview" className="hero-secondary">무엇을 만드는 실험인가요?<LabIcon name="chevron" size={16}/></Link><div className="hero-footnote"><LabIcon name="clock" size={17}/><span>하루 하나씩 · 전기 지식 없이 시작 · 실험별 준비물 안내</span></div></div><SolarPlayground/></section>
-    <aside className="lab-safety-strip"><LabIcon name="shield" size={21}/><p><strong>작게, 안전하게 시작해요.</strong><span>패널은 측정용 · ESP32 전원은 USB · 220V와 배터리 충전은 다루지 않아요.</span></p><Link href="/docs/02-safety-rules" aria-label="전체 안전 수칙 보기"><LabIcon name="arrow"/></Link></aside>
-    <CourseJourney lessons={lessons}/>
-    <section className="lab-section" aria-labelledby="parts-title"><div className="section-heading"><div><h2 id="parts-title">책상 위, 작은 실험실</h2><p>이름을 외우기 전에, 어떤 역할을 하는지부터 알아봐요.</p></div><Link className="text-link" href="/hardware">부품 6종 모두 보기<LabIcon name="arrow" size={18}/></Link></div><div className="part-grid">{PARTS.slice(0,3).map(p=><PartCard key={p.slug} part={p}/>)}</div></section>
-    <section className="home-help" aria-labelledby="help-title"><div><h2 id="help-title">막힐 때는, 여기서 잠깐.</h2><p>처음부터 전부 읽을 필요 없어요.<br/>지금 궁금한 것만 찾아보세요.</p></div><div className="home-help-links"><Link href="/glossary"><LabIcon name="book"/><span><b>모르는 말이 나왔어요</b><small>쉬운 설명으로 찾는 용어 사전</small></span><LabIcon name="arrow" size={17}/></Link><Link href="/calculator"><LabIcon name="calculator"/><span><b>연결 전에 계산해 볼래요</b><small>전압·저항으로 전류와 전력 계산</small></span><LabIcon name="arrow" size={17}/></Link><Link href="/curriculum"><LabIcon name="note"/><span><b>왜 그런지 더 알고 싶어요</b><small>실험 뒤에 읽는 전기·ESP32 이야기</small></span><LabIcon name="arrow" size={17}/></Link></div></section>
-  </div>;
+  return (
+    <div className="home">
+      <section className="hero">
+        <p className="eyebrow">서랍 속 태양광 키트 살리기</p>
+        <h1>외우기 전에, 먼저 작동시키자</h1>
+        <p className="lead">
+          미션마다 오늘 작동시킬 것 하나만 정한다. 3D 작업대에서 부품과 전류의 흐름을 먼저 보고, 실제로 연결하고, 숫자가 움직이면 그다음에 원리를 이야기로 듣는다.
+        </p>
+        <ul className="rules">
+          <li><b>작동했나, 하나 바꿔봤나</b>로 쌓인 걸 센다. 퀴즈나 시험은 없다.</li>
+          <li>공식은 기본만, 지금 화면의 숫자를 넣어서 몸에 붙인다.</li>
+          <li>궁금한 가지는 미션마다 &lsquo;나중에 볼 가지&rsquo;에 적어 두고 작동이 먼저.</li>
+        </ul>
+      </section>
+
+      <section className="missions" aria-label="미션 목록">
+        {MISSIONS.map((m) => (
+          <Link key={m.id} href={`/mission/${m.id}`} className="mcard">
+            <span className="num">{m.num}</span>
+            <div>
+              <h2>{m.title}</h2>
+              <p>{m.goal}</p>
+              <MissionStatus id={m.id} total={m.steps.length} />
+            </div>
+          </Link>
+        ))}
+      </section>
+
+      <section id="roadmap" className="roadmap">
+        <h2>뚝딱이 지도</h2>
+        <p className="lead">지금 미션은 첫 칸이야. 끝에는 AI와 함께 설계하고, 검증하고, 만들고, 시험하는 나만의 작업실이 있어.</p>
+        <ol>
+          {ROADMAP.map((s) => (
+            <li key={s.name} className={s.now ? 'now' : ''}>
+              <h3>{s.name}{s.now && <span className="badge">지금</span>}</h3>
+              <p>{s.what}</p>
+              <p className="make"><span>만들 것</span>{s.make}</p>
+              <p className="tags">{s.learn.map((l) => <em key={l}>{l}</em>)}</p>
+              <p className="tools">{s.tools.join(' · ')}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  );
 }

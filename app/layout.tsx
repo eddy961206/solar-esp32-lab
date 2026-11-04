@@ -1,25 +1,12 @@
 import type { Metadata, Viewport } from 'next';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Link from 'next/link';
 import './globals.css';
-import './lab.css';
 
 export const metadata: Metadata = {
-  title: {
-    default: '원룸 태양광 실험실 — ESP32로 배우는 첫 전기 실험',
-    template: '%s · 원룸 태양광 실험실',
-  },
-  description:
-    '어려운 말 없이 배우는 전기 첫걸음. SNP-5MA 패널 · ESP32 · INA219 · BH1750 5일 따라하기, 쉬운 부품 도감, 용어 사전, 150문제, 계산기 포함.',
+  title: { default: '태양광 작업대 — 만들면서 배우는 전기', template: '%s · 태양광 작업대' },
+  description: '서랍 속 태양광 키트로 시작하는 미션형 전기 실습. 3D 작업대에서 전류가 흐르는 걸 보고, 작동시키면서 배운다.',
   metadataBase: new URL('https://solar-esp32-lab.vercel.app'),
-  openGraph: {
-    title: '원룸 태양광 실험실',
-    description: '전기를 정확히 보는 사람이 되는 첫 실험 — 모바일 지원 웹 가이드',
-    type: 'website',
-    locale: 'ko_KR',
-    images: [{ url: '/images/01-lab-overview.png', width: 1200, height: 630 }],
-  },
-  twitter: { card: 'summary_large_image' },
+  openGraph: { title: '태양광 작업대', description: '작동시키면서 배우는 첫 전기 실습', type: 'website', locale: 'ko_KR' },
   robots: { index: true, follow: true },
 };
 
@@ -27,17 +14,28 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#286246',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f6f3ec' },
+    { media: '(prefers-color-scheme: dark)', color: '#16171a' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="min-h-dvh flex flex-col">
-        <a href="#main-content" className="skip-link">본문으로 바로가기</a>
-        <Header />
-        <main id="main-content" tabIndex={-1} className="lab-main">{children}</main>
-        <Footer />
+      <body>
+        <header className="site-head">
+          <Link href="/" className="brand"><span aria-hidden>☀︎</span> 태양광 작업대</Link>
+          <nav>
+            <Link href="/">미션</Link>
+            <Link href="/parts">부품 서랍</Link>
+            <Link href="/traits">특성 카드</Link>
+          </nav>
+        </header>
+        <main>{children}</main>
+        <footer className="site-foot">
+          낮은 전압 직류만 다룬다. 220V 콘센트, 배전반, 리튬 배터리 충전 회로는 이 사이트만 보고 만지지 않는다.
+        </footer>
       </body>
     </html>
   );

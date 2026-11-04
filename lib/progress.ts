@@ -1,14 +1,38 @@
-/** Keep the existing per-lesson keys so a redesign never deletes a learner's progress. */
-export function readProgress(slug: string, count: number): number[] {
-  try {
-    const value: unknown = JSON.parse(localStorage.getItem(`lesson-steps-${slug}`) || '[]');
-    return Array.isArray(value) ? Array.from(new Set(value.filter((n): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0 && n < count))) : [];
-  } catch { return []; }
+// 진도는 이 브라우저에만 저장한다. 계정이나 서버 없이 쓰는 개인 실험 노트.
+
+export interface MissionProgress {
+  steps: number[];
+  worked: boolean;
+  changed: boolean;
+  notes: string;
 }
-export function writeProgress(slug: string, indices: number[]): boolean {
+
+const KEY = 'solar-lab:v2';
+const empty = (): MissionProgress => ({ steps: [], worked: false, changed: false, notes: '' });
+
+function readAll(): Record<string, MissionProgress> {
   try {
-    localStorage.setItem(`lesson-steps-${slug}`, JSON.stringify(indices));
-    window.dispatchEvent(new Event('lab-progress'));
-    return true;
-  } catch { return false; }
+    return JSON.parse(localStorage.getItem(KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+export function load(id: string): MissionProgress {
+  return { ...empty(), ...(readAll()[id] ?? {}) };
+}
+
+export function save(id: string, p: MissionProgress) {
+  try {
+    const all = readAll();
+    all[id] = p;
+    localStorage.setItem(KEY, JSON.stringify(all));
+    window.dispatchEvent(new Event('solar-lab-progress'));
+  } catch {
+    // 저장이 막힌 브라우저에서도 화면은 그대로 쓸 수 있다.
+  }
+}
+
+export function loadAll(): Record<string, MissionProgress> {
+  return readAll();
 }
